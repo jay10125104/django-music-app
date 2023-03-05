@@ -1,0 +1,56 @@
+{% extends 'App/navbar.html' %}
+{% load static %}
+{% block data %}
+  <div class="contain">
+    <div class="container">
+      <nav class="navbar">
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="{% url 'addmusic' %}">Add Music</a></li>
+            <li><a href="#">Contact us</a></li>
+            <div class="search">
+                <input type="text" name="search1" id="search" placeholder="">
+              </div>
+        </ul>
+    </nav>
+    {% block maincontent %}
+    <div class="music-player">
+      {% for item in page_obj %}
+      <div class="cover">
+        {% if item.image.url != NULL %}
+        <img class="images1" alt="" src="{{item.image.url}}"/>
+        {% else %}
+        <img class="images1" alt="" src="{% static 'img/one.jpg' %}"/>
+        {% endif %}
+
+      </div>
+      <div class="title">
+        <h1>
+          {% if item.title %}
+          {{item.title}}
+          {% else %}
+          Unknown
+          {% endif %}
+        </h1>
+        <h3>
+          {% if item.title %}
+          {{item.artist}}
+          {% else %}
+          Unknown
+          {% endif %}
+         
+        </h3>
+      </div>
+      <center><a href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% endif %}"><i class="fa fa-step-backward fa-2x"></i></a> &nbsp; &nbsp; &nbsp; <a href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }} {% endif %}"><i class="fa fa-step-forward fa-2x"></i></a></center>
+      <div class="adio">
+        <audio class="fc-media" style="width: 100%;">
+          <source src="{% if item.audio_file %}{{item.audio_file.url}} {% else %} {{item.audio_link}} {% endif %}" type="audio/mp3"/>
+        </audio>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endblock maincontent %}
+</div>
+{% endblock data %}
